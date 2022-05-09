@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# optional argument handling
+if [[ "$1" == "version" ]]
+then
+    echo "1.0.0"
+    exit 0
+fi
+
+# optional argument handling
+if [[ "$1" == "config" ]]
+then
+    echo "$KUBECONFIG"
+    exit 0
+fi
+echo -n '
+Ref: https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/
+Example usage:
+k dump # dump all data
+k evt  # show events
+kubectl plugin list
+# Sample Commands:
+kubectl get events --sort-by='"'"'.metadata.creationTimestamp'"'"'
+## vscode remote install
+curl -fsSL https://code-server.dev/install.sh | sh
+'

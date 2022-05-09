@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+   name: active-incident-storage
+spec:
+   storageClassName: active-incident-storage-class
+   accessModes:
+     - ReadWriteOnce
+   resources:
+     requests:
+       storage: 20Gi

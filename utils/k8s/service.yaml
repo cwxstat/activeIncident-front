@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: active-incident-manager
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 34.0.0.0
+  selector:
+    app.kubernetes.io/name: active-incident-manager
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 2379

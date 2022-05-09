@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+    tier: db
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 34.66.213.165
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  selector:
+    app: mongo
+    tier: db
