@@ -32,10 +32,32 @@ func TestFull(t *testing.T) {
 		},
 	}
 
+	incident1 := Incident{
+		IncidentNo:      "1",
+		IncidentType:    "test",
+		IncidentSubTupe: "",
+		Location:        "",
+		Municipality:    "",
+		DispatchTime:    "",
+		Station:         "",
+		IncidentStatus:  []IncidentStatus{},
+	}
+
+	incident2 := Incident{
+		IncidentNo:      "2",
+		IncidentType:    "test",
+		IncidentSubTupe: "",
+		Location:        "",
+		Municipality:    "",
+		DispatchTime:    "",
+		Station:         "",
+		IncidentStatus:  []IncidentStatus{},
+	}
+
 	err = as.db.AddEntry(ctx, ActiveIncidentEntry{
 		MainWebPage:      "Main",
 		IncidentWebPages: iwebp,
-		Incidents:        []Incident{},
+		Incidents:        []Incident{incident1, incident2},
 		Message:          "Test Message",
 		TimeStamp:        dbutils.NYtime(),
 	})
@@ -47,12 +69,28 @@ func TestFull(t *testing.T) {
 		{"date", -1},
 		{"_id", 1},
 	})
-	result, err := as.db.EntriesMinutesAgo(ctx, 1, opts)
+	cur, err := as.db.EntriesMinutesAgo(ctx, 1, opts)
 	if err != nil {
 		t.FailNow()
 	}
+	defer cur.Close(ctx)
+	var out []Return
+	for cur.Next(ctx) {
+		var v Return
+		if err := cur.Decode(&v); err != nil {
+			t.Error(err)
 
-	_ = result
+		}
+		out = append(out, v)
+	}
+	if err := cur.Err(); err != nil {
+		t.Error(err)
+	}
+
+	if out[0].Incidents[1].IncidentNo != "2" {
+		t.Fatalf("Didn't get correct value back. Expected 2, got: %+v\n", out[1].Incidents[1].IncidentNo)
+	}
+
 	err = as.db.DeleteAll(ctx, "Test Message")
 	if err != nil {
 		t.FailNow()
