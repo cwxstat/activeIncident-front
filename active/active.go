@@ -9,6 +9,7 @@ import (
 	"github.com/cwxstat/activeIncident-front/dbutils"
 	"github.com/cwxstat/activeIncident-front/dbutils/db"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -58,6 +59,7 @@ type ActiveIncidentEntry struct {
 
 type activeIncidentServer struct {
 	db db.Database
+	client *mongo.Client
 }
 
 func NewActiveIncidentServer(ctx context.Context) (*activeIncidentServer, error) {
@@ -73,6 +75,7 @@ func NewActiveIncidentServer(ctx context.Context) (*activeIncidentServer, error)
 			Database:   dbutils.LookupEnv("MONGO_DB", "activeIncident"),
 			Collection: dbutils.LookupEnv("MONGO_COLLECTION", "events"),
 		},
+		client: client,
 	}
 	return a, nil
 }

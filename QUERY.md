@@ -1,4 +1,5 @@
 
+This just gives CHELTENHAM
 ```bash
 db.events.aggregate([
     {$match: {"incidents.municipality": {$eq:"CHELTENHAM"}}}, // <-- match only the document which have a matching element
