@@ -32,11 +32,8 @@ func LookupEnv(key string, defaultValue string) string {
 
 func Conn(ctx context.Context) (*mongo.Client, error) {
 
-	mongoURI := os.Getenv("MONGO_URI")
-	if mongoURI == "" {
-		log.Println("MONGO_URI environment variable not specified")
-		return nil, fmt.Errorf("MONGO_URI environment variable not specified")
-	}
+	mongoURI := LookupEnv("MONGO_URI",
+	"mongodb://localhost:27017/?directConnection=true&serverSelectionTimeoutMS=2000")
 
 	dbConn, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoURI))
 	if err != nil {
